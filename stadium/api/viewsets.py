@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from ..models import Stadium
 
 class StadiumViewSet(viewsets.ViewSet):
-    queryset = Stadium.objects.all()
 
     def list(self, request):
         queryset = Stadium.objects.all()
