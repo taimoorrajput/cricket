@@ -11,7 +11,8 @@ class TeamViewSet(viewsets.ViewSet):
         queryset = Team.objects.all()
         serializer = TeamSerializer(queryset, many=True)
         return Response({
-            'data list': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def create(self, request):
@@ -19,35 +20,38 @@ class TeamViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({
-            'created data': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def delete(self, request ,pk=None):
-        id = pk
-        queryset = Team.objects.get(pk=id)
+        queryset = Team.objects.get(pk=pk)
         queryset.delete()
         return Response({
-            'msg':'data deleted'
+            'success': True,
+            'result': {}
         })
 
     def update(self, request, pk=None):
-        id = pk
-        queryset = Team.objects.get(pk=id)
+        queryset = Team.objects.get(pk=pk)
         serializer = TeamSerializer(queryset,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
-#                'msg':'partial data is updated'
-                'updated data': serializer.data
+            'success': True,
+            'result': serializer.data
+        })
+        return Response({
+            'success': False,
+            'result': serializer.error
             })
-        return Response(serializer.error)
 
     def retrieve(self, request, pk=None):
-        id = pk
-        queryset = Team.objects.get(pk=id)
+        queryset = Team.objects.get(pk=pk)
         serializer = TeamSerializer(queryset)
         return Response({
-            'retrived data':serializer.data
+            'success': True,
+            'result': serializer.data
         })
         
 class PlayerViewSet(viewsets.ViewSet):
@@ -57,7 +61,8 @@ class PlayerViewSet(viewsets.ViewSet):
         queryset = Player.objects.all()
         serializer = PlayerSerializer(queryset, many=True)
         return Response({
-            'data list': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def create(self, request):
@@ -65,34 +70,37 @@ class PlayerViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({
-            'created data': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def delete(self, request ,pk=None):
-        id = pk
-        queryset = Player.objects.get(pk=id)
+        queryset = Player.objects.get(pk=pk)
         queryset.delete()
         return Response({
-            'msg':'data deleted'
+            'success': True,
+            'result': {}
         })
 
     def update(self, request, pk=None):
-        id = pk
-        queryset = Player.objects.get(pk=id)
+        queryset = Player.objects.get(pk=pk)
         serializer = PlayerSerializer(queryset,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
-            #    'msg':'partial data is updated'
-                'created data': serializer.data
+            'success': True,
+            'result': serializer.data
+        })
+        return Response({
+            'success': False,
+            'result': serializer.error
             })
-        return Response(serializer.error)
 
     def retrieve(self, request, pk=None):
-        id = pk
-        queryset = Player.objects.get(pk=id)
+        queryset = Player.objects.get(pk=pk)
         serializer = PlayerSerializer(queryset)
         return Response({
-            'retrived data':serializer.data
+            'success': True,
+            'result': serializer.data
         })
         

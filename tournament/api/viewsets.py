@@ -11,7 +11,8 @@ class TournamentViewSet(viewsets.ViewSet):
         queryset = Tournament.objects.all()
         serializer = TournamentSerializer(queryset, many=True)
         return Response({
-            'data list': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def create(self, request):
@@ -19,34 +20,38 @@ class TournamentViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({
-            'created data': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def delete(self, request ,pk=None):
-        id = pk
-        queryset = Tournament.objects.get(pk=id)
+        queryset = Tournament.objects.get(pk=pk)
         queryset.delete()
         return Response({
-            'msg':'data deleted'
+            'success': True,
+            'result': serializer.data
         })
 
     def update(self, request, pk=None):
-        id = pk
-        queryset = Tournament.objects.get(pk=id)
+        queryset = Tournament.objects.get(pk=pk)
         serializer = TournamentSerializer(queryset,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
-                'updated data': serializer.data
+            'success': True,
+            'result': serializer.data
+        })
+        return Response({
+            'success': False,
+            'result': serializer.error
             })
-        return Response(serializer.error)
 
     def retrieve(self, request, pk=None):
-        id = pk
-        queryset = Tournament.objects.get(pk=id)
+        queryset = Tournament.objects.get(pk=pk)
         serializer = TournamentSerializer(queryset)
         return Response({
-            'retrived data':serializer.data
+            'success': True,
+            'result': serializer.data
         })
         
 class MatchViewSet(viewsets.ViewSet):
@@ -56,7 +61,8 @@ class MatchViewSet(viewsets.ViewSet):
         queryset = Match.objects.all()
         serializer = MatchSerializer(queryset, many=True)
         return Response({
-            'data list': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def create(self, request):
@@ -64,7 +70,8 @@ class MatchViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({
-            'created data': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def delete(self, request ,pk=None):
@@ -72,26 +79,29 @@ class MatchViewSet(viewsets.ViewSet):
         queryset = Match.objects.get(pk=id)
         queryset.delete()
         return Response({
-            'msg':'data deleted'
+            'success': True,
+            'result': {}
         })
 
     def update(self, request, pk=None):
-        id = pk
-        queryset = Match.objects.get(pk=id)
+        queryset = Match.objects.get(pk=pk)
         serializer = MatchSerializer(queryset,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
-            #    'msg':'partial data is updated',
-                'updated data':serializer.data
+            'success': True,
+            'result': serializer.data
+        })
+        return Response({
+            'success': False,
+            'result': serializer.error
             })
-        return Response(serializer.error)
 
     def retrieve(self, request, pk=None):
-        id = pk
-        queryset = Match.objects.get(pk=id)
+        queryset = Match.objects.get(pk=pk)
         serializer = MatchSerializer(queryset)
         return Response({
-            'retrived data':serializer.data
+            'success': True,
+            'result': serializer.data
         })
         

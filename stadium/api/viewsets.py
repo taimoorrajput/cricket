@@ -11,7 +11,8 @@ class StadiumViewSet(viewsets.ViewSet):
         queryset = Stadium.objects.all()
         serializer = StadiumSerializer(queryset, many=True)
         return Response({
-            'data List': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def create(self, request):
@@ -19,33 +20,37 @@ class StadiumViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({
-            'created data': serializer.data
+            'success': True,
+            'result': serializer.data
         })
 
     def delete(self, request ,pk=None):
-        id = pk
-        queryset = Stadium.objects.get(pk=id)
+        queryset = Stadium.objects.get(pk=pk)
         queryset.delete()
         return Response({
-            'msg':'data deleted'
+            'success': True,
+            'result': {}
         })
 
     def update(self, request, pk=None):
-        id = pk
-        queryset = Stadium.objects.get(pk=id)
+        queryset = Stadium.objects.get(pk=pk)
         serializer = StadiumSerializer(queryset,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
-                'data updated': serializer.data
+            'success': True,
+            'result': serializer.data
+        })
+        return Response({
+            'success': False,
+            'result': serializer.error
             })
-        return Response(serializer.error)
 
     def retrieve(self, request, pk=None):
-        id = pk
-        queryset = Stadium.objects.get(pk=id)
+        queryset = Stadium.objects.get(pk=pk)
         serializer = StadiumSerializer(queryset)
         return Response({
-            'retrived data':serializer.data
+            'success': True,
+            'result': serializer.data
         })
         
