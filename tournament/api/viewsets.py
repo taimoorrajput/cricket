@@ -10,9 +10,8 @@ class TournamentViewSet(viewsets.ViewSet):
     def get_queryset(self, request):
         queryset = Tournament.objects.all()
         name = request.query_params.get('name', None)
-        if name:
-            all_queryset = queryset.filter(name=name)
-            return all_queryset
+        if name is not None:
+            queryset = queryset.filter(name=name)
         return queryset
 
     def list(self, request):
@@ -52,7 +51,7 @@ class TournamentViewSet(viewsets.ViewSet):
         return Response({
             'success': False,
             'result': serializer.error
-            })
+        })
 
     def retrieve(self, request, pk=None):
         queryset = Tournament.objects.get(pk=pk)
@@ -68,9 +67,9 @@ class MatchViewSet(viewsets.ViewSet):
         queryset = Match.objects.all()
         toss = request.query_params.get('toss', None)
         name = request.query_params.get('name',None)
-        if toss:
+        if toss is not None:
             queryset = queryset.filter(toss=toss)
-        if name:
+        if name is not None:
             queryset = queryset.filter(tournament__name=name)
         return queryset
 
@@ -92,8 +91,7 @@ class MatchViewSet(viewsets.ViewSet):
         })
 
     def delete(self, request ,pk=None):
-        id = pk
-        queryset = Match.objects.get(pk=id)
+        queryset = Match.objects.get(pk=pk)
         queryset.delete()
         return Response({
             'success': True,
@@ -106,13 +104,13 @@ class MatchViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response({
-            'success': True,
-            'result': serializer.data
+                'success': True,
+                'result': serializer.data
         })
         return Response({
             'success': False,
             'result': serializer.error
-            })
+        })
 
     def retrieve(self, request, pk=None):
         queryset = Match.objects.get(pk=pk)

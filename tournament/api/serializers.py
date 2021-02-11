@@ -23,8 +23,9 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
 
 class MatchDetailedSerializer(serializers.ModelSerializer):
 
-    tournament = TournamentSerializer()
+    tournament = TournamentSerializer(many=True,read_only=True)
 
     class Meta:
         model = Match
         fields = ['id','toss','result','match_date','tournament','stadium']
+        

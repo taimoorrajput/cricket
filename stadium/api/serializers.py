@@ -9,7 +9,7 @@ class StadiumSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StadiumDetailSerializer(serializers.ModelSerializer):
-    matches = MatchSerializer(many=True)
+    matches = MatchSerializer(many=True,read_only=True)
 
     class Meta:
         model = Stadium

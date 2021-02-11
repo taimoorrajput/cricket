@@ -9,7 +9,7 @@ class TeamViewSet(viewsets.ViewSet):
     def get_queryset(self, request):
         queryset = Team.objects.all()
         country = request.query_params.get('country', None)
-        if country:
+        if country is not None:
             queryset = queryset.filter(country=country)
         return queryset
 
@@ -50,7 +50,7 @@ class TeamViewSet(viewsets.ViewSet):
         return Response({
             'success': False,
             'result': serializer.error
-            })
+        })
 
     def retrieve(self, request, pk=None):
         queryset = Team.objects.get(pk=pk)
@@ -66,9 +66,9 @@ class PlayerViewSet(viewsets.ViewSet):
         queryset = Player.objects.all()
         name = request.query_params.get('name', None)
         category = request.query_params.get('category', None)
-        if name:
+        if name is not None:
             queryset = queryset.filter(name=name)
-        if category:
+        if category is not None:
             queryset = queryset.filter(category=category)
         return queryset
 
@@ -109,7 +109,7 @@ class PlayerViewSet(viewsets.ViewSet):
         return Response({
             'success': False,
             'result': serializer.error
-            })
+        })
 
     def retrieve(self, request, pk=None):
         queryset = Player.objects.get(pk=pk)

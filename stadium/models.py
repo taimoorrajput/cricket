@@ -3,7 +3,7 @@ import datetime
 
 class Stadium(models.Model):
     
-    name = models.CharField(max_length=100)
+    name = models.CharField('Stadium Name',max_length=100)
     capacity = models.IntegerField()
     country = models.CharField(max_length=100)
 
