@@ -1,15 +1,21 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import TeamSerializer,PlayerSerializer
+from .serializers import TeamSerializer, PlayerSerializer, PlayerDetailSerializer, TeamDetailSerializer
 from rest_framework.response import Response
 from ..models import Team,Player
 
 class TeamViewSet(viewsets.ViewSet):
-    queryset = Team.objects.all()
+
+    def get_queryset(self, request):
+        queryset = Team.objects.all()
+        country = request.query_params.get('country', None)
+        if country:
+            queryset = queryset.filter(country=country)
+        return queryset
 
     def list(self, request):
-        queryset = Team.objects.all()
-        serializer = TeamSerializer(queryset, many=True)
+        queryset = self.get_queryset(request)
+        serializer = TeamDetailSerializer(queryset, many=True)
         return Response({
             'success': True,
             'result': serializer.data
@@ -48,18 +54,27 @@ class TeamViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Team.objects.get(pk=pk)
-        serializer = TeamSerializer(queryset)
+        serializer = TeamDetailSerializer(queryset)
         return Response({
             'success': True,
             'result': serializer.data
         })
         
 class PlayerViewSet(viewsets.ViewSet):
-    queryset = Player.objects.all()
+
+    def get_queryset(self, request):
+        queryset = Player.objects.all()
+        name = request.query_params.get('name', None)
+        category = request.query_params.get('category', None)
+        if name:
+            queryset = queryset.filter(name=name)
+        if category:
+            queryset = queryset.filter(category=category)
+        return queryset
 
     def list(self, request):
-        queryset = Player.objects.all()
-        serializer = PlayerSerializer(queryset, many=True)
+        queryset = self.get_queryset(request)
+        serializer = PlayerDetailSerializer(queryset, many=True)
         return Response({
             'success': True,
             'result': serializer.data
@@ -98,7 +113,7 @@ class PlayerViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Player.objects.get(pk=pk)
-        serializer = PlayerSerializer(queryset)
+        serializer = PlayerDetailSerializer(queryset)
         return Response({
             'success': True,
             'result': serializer.data

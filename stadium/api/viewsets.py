@@ -1,14 +1,26 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import StadiumSerializer
+from .serializers import StadiumSerializer, StadiumDetailSerializer
+from tournament.api.serializers import MatchSerializer, MatchDetailedSerializer
 from rest_framework.response import Response
+from tournament.models import Match
 from ..models import Stadium
 
 class StadiumViewSet(viewsets.ViewSet):
 
-    def list(self, request):
+    def get_queryset(self, request):
         queryset = Stadium.objects.all()
-        serializer = StadiumSerializer(queryset, many=True)
+        name = request.query_params.get('name', None)
+        country = request.query_params.get('country', None)
+        if name:
+            queryset = queryset.filter(name=name)
+        if country:
+            queryset = queryset.filter(country=country)
+        return queryset
+
+    def list(self, request):
+        queryset = self.get_queryset(request)
+        serializer = StadiumDetailSerializer(queryset, many=True)
         return Response({
             'success': True,
             'result': serializer.data
@@ -47,7 +59,7 @@ class StadiumViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Stadium.objects.get(pk=pk)
-        serializer = StadiumSerializer(queryset)
+        serializer = StadiumDetailSerializer(queryset)
         return Response({
             'success': True,
             'result': serializer.data

@@ -1,15 +1,23 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import TournamentSerializer,MatchSerializer
+from .serializers import TournamentSerializer, MatchSerializer, MatchDetailedSerializer, TournamentDetailSerializer
 from rest_framework.response import Response
 from ..models import Tournament,Match
+from stadium.models import Stadium
 
 class TournamentViewSet(viewsets.ViewSet):
-    queryset = Tournament.objects.all()
+
+    def get_queryset(self, request):
+        queryset = Tournament.objects.all()
+        name = request.query_params.get('name', None)
+        if name:
+            all_queryset = queryset.filter(name=name)
+            return all_queryset
+        return queryset
 
     def list(self, request):
-        queryset = Tournament.objects.all()
-        serializer = TournamentSerializer(queryset, many=True)
+        queryset = self.get_queryset(request)
+        serializer = TournamentDetailSerializer(queryset, many=True)
         return Response({
             'success': True,
             'result': serializer.data
@@ -48,18 +56,27 @@ class TournamentViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Tournament.objects.get(pk=pk)
-        serializer = TournamentSerializer(queryset)
+        serializer = TournamentDetailSerializer(queryset)
         return Response({
             'success': True,
             'result': serializer.data
         })
         
 class MatchViewSet(viewsets.ViewSet):
-    queryset = Match.objects.all()
+
+    def get_queryset(self, request):
+        queryset = Match.objects.all()
+        toss = request.query_params.get('toss', None)
+        name = request.query_params.get('name',None)
+        if toss:
+            queryset = queryset.filter(toss=toss)
+        if name:
+            queryset = queryset.filter(tournament__name=name)
+        return queryset
 
     def list(self, request):
-        queryset = Match.objects.all()
-        serializer = MatchSerializer(queryset, many=True)
+        queryset = self.get_queryset(request)
+        serializer = MatchDetailedSerializer(queryset, many=True)
         return Response({
             'success': True,
             'result': serializer.data
@@ -99,7 +116,7 @@ class MatchViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Match.objects.get(pk=pk)
-        serializer = MatchSerializer(queryset)
+        serializer = MatchDetailedSerializer(queryset)
         return Response({
             'success': True,
             'result': serializer.data
