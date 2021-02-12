@@ -19,11 +19,11 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tournament
-        fields = ["id","name","location","start_date","end_date","matches"]
+        fields = ['id','name','location','start_date','end_date','matches']
 
 class MatchDetailedSerializer(serializers.ModelSerializer):
 
-    tournament = TournamentSerializer(many=True,read_only=True)
+    tournament = TournamentSerializer()
 
     class Meta:
         model = Match

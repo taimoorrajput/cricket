@@ -22,7 +22,7 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PlayerDetailSerializer(serializers.ModelSerializer):
-    teams = TeamSerializer(many=True,read_only=True)
+    teams = TeamSerializer()
 
     class Meta:
         model = Player

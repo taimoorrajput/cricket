@@ -13,4 +13,4 @@ class StadiumDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stadium
-        fields = ["id","name","capacity","country","matches"]
+        fields = ['id','name','capacity','country','matches']
