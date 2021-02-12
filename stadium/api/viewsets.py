@@ -12,9 +12,9 @@ class StadiumViewSet(viewsets.ViewSet):
         queryset = Stadium.objects.all()
         name = request.query_params.get('name', None)
         country = request.query_params.get('country', None)
-        if name:
+        if name is not None:
             queryset = queryset.filter(name=name)
-        if country:
+        if country is not None:
             queryset = queryset.filter(country=country)
         return queryset
 

@@ -27,3 +27,4 @@ class PlayerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = ['id','name','age','category','teams']
+        
